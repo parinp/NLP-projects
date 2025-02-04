@@ -1,5 +1,6 @@
 import streamlit as st
-import pandas as pd
+import os
+from dotenv import load_dotenv
 import json
 import requests
 from newspaper import Article
@@ -16,8 +17,11 @@ def load_summarizer():
     return pipeline("summarization", model="sshleifer/distilbart-cnn-12-6"), BartTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
     # return pipeline("summarization", model="google-t5/t5-small"),   T5Tokenizer.from_pretrained("google-t5/t5-small")
 
+load_dotenv()
+
 MAX_TOKENS = 1022
 summarizer, model_tokenizer = load_summarizer()
+API_KEY = os.getenv("NEWSAPI_KEY")
 
 # Function to create the correct search URL
 def encode_query(query):
@@ -72,7 +76,7 @@ def fetch_articles_from_newsapi(query, max_results=10):
     """
     Fetch articles sorted by relevancy, published time, and reputability using NewsAPI.org.
     """
-    API_KEY = ""  # Replace with your NewsAPI key
+
     url = (
         f"https://newsapi.org/v2/everything?"
         f"q={query}&"
