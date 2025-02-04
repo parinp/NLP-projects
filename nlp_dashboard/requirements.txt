@@ -13,3 +13,4 @@ lxml_html_clean
 python-dotenv
 sumy
 spacy
+tabulate
