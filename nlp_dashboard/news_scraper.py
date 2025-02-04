@@ -72,7 +72,7 @@ def fetch_articles_from_newsapi(query, max_results=10):
     """
     Fetch articles sorted by relevancy, published time, and reputability using NewsAPI.org.
     """
-    API_KEY = "8828e1a3e8d14aaaa1c49066cd93060f"  # Replace with your NewsAPI key
+    API_KEY = ""  # Replace with your NewsAPI key
     url = (
         f"https://newsapi.org/v2/everything?"
         f"q={query}&"
