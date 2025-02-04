@@ -1,8 +1,12 @@
+import streamlit as st
 from transformers import pipeline
 
-# Load pre-trained model for zero-shot classification
-# sentiment_analyzer = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
-sentiment_analyzer = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+@st.cache_resource
+def load_sentiment_model():
+    # return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+    return pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli")
+
+sentiment_analyzer = load_sentiment_model()
 
 # Function to analyze sentiment of a given text
 def analyze_sentiment(text):
