@@ -11,3 +11,5 @@ requests
 duckduckgo-search
 lxml_html_clean
 python-dotenv
+sumy
+spacy
