@@ -5,7 +5,8 @@ pandas
 matplotlib
 wordcloud
 nltk
-newspaper3k
+newspaper4k
 beautifulsoup4
 requests
 duckduckgo-search
+lxml_html_clean
