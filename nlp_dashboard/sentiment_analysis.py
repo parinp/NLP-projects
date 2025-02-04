@@ -1,6 +1,7 @@
 from transformers import pipeline
 
 # Load pre-trained model for zero-shot classification
+# sentiment_analyzer = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 sentiment_analyzer = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 # Function to analyze sentiment of a given text
