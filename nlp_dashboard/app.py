@@ -32,6 +32,8 @@ if st.button("Get News"):
             wordcloud = generate_wordcloud(combined_summary)
             st.image(wordcloud.to_array())
 
+            st.write("Generating sentiment analysis...")
+
             # Sentiment analysis of the combined text
             label, score = analyze_sentiment(combined_summary)
             st.write(f"Sentiment: {label} with confidence {score:.2f}")
