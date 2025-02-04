@@ -10,6 +10,9 @@ from duckduckgo_search import DDGS
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
+import nltk
+
+nltk.download('punkt_tab')
 
 @st.cache_resource(max_entries=1)
 def load_summarizer():
