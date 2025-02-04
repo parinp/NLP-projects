@@ -21,7 +21,9 @@ load_dotenv()
 
 MAX_TOKENS = 1022
 summarizer, model_tokenizer = load_summarizer()
-API_KEY = os.getenv("NEWSAPI_KEY")
+# API_KEY = os.getenv("NEWSAPI_KEY")
+API_KEY = st.secrets["NEWSAPI_KEY"]
+
 
 # Function to create the correct search URL
 def encode_query(query):
