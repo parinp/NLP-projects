@@ -14,34 +14,16 @@ import nltk
 
 nltk.download('punkt_tab')
 
-# Model choices with speed & accuracy details
-MODELS = {
-    "DistilBART (Fast, Good Accuracy)": {
-        "name": "sshleifer/distilbart-cnn-12-6",
-        "tokenizer": BartTokenizer
-    },
-    "BART Large (Slower, High Accuracy)": {
-        "name": "facebook/bart-large-cnn",
-        "tokenizer": BartTokenizer
-    },
-    "T5 Small (Very Fast, Lower Accuracy)": {
-        "name": "google/t5-small",
-        "tokenizer": T5Tokenizer
-    },
-    "Pegasus (Slowest, Best for Long Summaries)": {
-        "name": "google/pegasus-xsum",
-        "tokenizer": T5Tokenizer
-    }
-}
-
 @st.cache_resource(max_entries=1)
-def load_summarizer(model_name):
-    model_info = MODELS[model_name]
-    return pipeline("summarization", model=model_info["name"]), model_info["tokenizer"].from_pretrained(model_info["name"])
+def load_summarizer():
+    # return pipeline("summarization", model="facebook/bart-large-cnn"), BartTokenizer.from_pretrained("facebook/bart-large-cnn")
+    return pipeline("summarization", model="sshleifer/distilbart-cnn-12-6"), BartTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
+    # return pipeline("summarization", model="google-t5/t5-small"),   T5Tokenizer.from_pretrained("google-t5/t5-small")
 
 load_dotenv()
 
 MAX_TOKENS = 1022
+summarizer, model_tokenizer = load_summarizer()
 # API_KEY = os.getenv("NEWSAPI_KEY")
 API_KEY = st.secrets["NEWSAPI_KEY"]
 
@@ -178,7 +160,7 @@ def fetch_and_summarize(urls):
     return all_articles
 
 # Combine multiple summaries into one
-def summarize_articles(articles, summarizer, model_tokenizer):
+def summarize_articles(articles):
     
     # combined_text = " ".join(article['text'] for article in articles)
     combined_text = " ".join(articles)
