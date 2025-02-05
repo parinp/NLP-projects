@@ -9,16 +9,15 @@ This Python script fetches news articles using the NewsAPI.org API primarliy or 
 - Returns structured data (title and URL) for easy use.
 
 ## Testing
-Please feel free to test the script with your own queries. The script is designed to be flexible.
+Please feel free to test the script with your own queries. The script is designed to be flexible.  
 https://nlp-projects-hhhqvxvtzqngdztqz8vk8p.streamlit.app/
 
 ## Example results
-Summary:
+Summary:  
 ![Summary](assets/summary_eg.png)
 
-WordCloud:
-Summary:
+WordCloud:  
 ![WordCloud](assets/wordcloud.png)
 
-Sentiment:
+Sentiment:  
 ![Sentiment](assets/sentiment.png)
