@@ -18,7 +18,7 @@ nltk.download('punkt_tab')
 def load_summarizer():
     # return pipeline("summarization", model="facebook/bart-large-cnn"), BartTokenizer.from_pretrained("facebook/bart-large-cnn")
     # return pipeline("summarization", model="sshleifer/distilbart-cnn-12-6"), BartTokenizer.from_pretrained("sshleifer/distilbart-cnn-12-6")
-    return pipeline("summarization", model="google-t5/t5-small"),   T5Tokenizer.from_pretrained("google-t5/t5-small")
+    return pipeline("summarization", model="google-t5/t5-small"), T5Tokenizer.from_pretrained("google-t5/t5-small")
 
 load_dotenv()
 
