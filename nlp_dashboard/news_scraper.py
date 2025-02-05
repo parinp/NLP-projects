@@ -31,19 +31,14 @@ API_KEY = st.secrets["NEWSAPI_KEY"]
 def fetch_articles_from_url(query, max_results=10):
     """
     Fetch articles using DuckDuckGo API, prioritizing reputable sources.
+    Returns a list of dictionaries containing the title and URL of each article.
     """
     # List of reputable domains
     reputable_domains = ["www.bbc.co.uk", "www.bloomberg.com", "edition.cnn.com", "www.cnbc.com", 
-                         "www.cnbc.com","www.aljazeera.com"]
+                         "www.cnbc.com", "www.aljazeera.com"]
     
     # Fetch articles using DuckDuckGo
-    results = DDGS().news(keywords=query, max_results= (max_results*5) )
-    # Serializing json
-    json_object = json.dumps(results, indent=4)
-    
-    # Writing to sample.json
-    with open("urls.json", "w") as outfile:
-        outfile.write(json_object)
+    results = DDGS().news(keywords=query, max_results=(max_results * 5))
     
     # Separate articles into reputable and other sources
     reputable_articles = []
@@ -66,10 +61,10 @@ def fetch_articles_from_url(query, max_results=10):
     if len(all_articles) > max_results:
         all_articles = all_articles[:max_results]
     
-    # Extract URLs from the combined list
-    article_links = [result['url'] for result in all_articles]
+    # Extract titles and URLs from the combined list
+    article_info = [{'url': result['url'], 'title': result['title']} for result in all_articles]
     
-    return article_links
+    return article_info
 
 def fetch_articles_from_newsapi(query, max_results=10):
     """
