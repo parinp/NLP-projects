@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
 import urllib.parse
-from transformers import pipeline
 from wordcloud_visualizer import generate_wordcloud
 from sentiment_analysis import analyze_sentiment
-from news_scraper import fetch_articles_from_newsapi, fetch_and_summarize, summarize_articles, encode_query
+from news_scraper import fetch_articles_from_newsapi, fetch_and_summarize, summarize_articles
 
 # Streamlit UI
 st.title("Interactive Specific News Summarizer")
