@@ -27,55 +27,51 @@ summarizer, model_tokenizer = load_summarizer()
 # API_KEY = os.getenv("NEWSAPI_KEY")
 API_KEY = st.secrets["NEWSAPI_KEY"]
 
-# Function to fetch article links from the search result page
+# Function to fetch article links from DuckDuckGo Search
 def fetch_articles_from_url(query, max_results=10):
     """
     Fetch articles using DuckDuckGo API, prioritizing reputable sources.
-    Returns a list of dictionaries containing the title and URL of each article.
+    Returns a list of dictionaries containing the URL and title of each article.
     """
-    # List of reputable domains
+    # Reputable domains
     reputable_domains = ["www.bbc.co.uk", "www.bloomberg.com", "edition.cnn.com", "www.cnbc.com", 
                          "www.cnbc.com", "www.aljazeera.com"]
     
-    # Fetch articles using DuckDuckGo
+    # DuckDuckGo Search
     results = DDGS().news(keywords=query, max_results=(max_results * 5))
     
-    # Separate articles into reputable and other sources
+    # Populating resultant articles
     reputable_articles = []
     other_articles = []
-
     for result in results:
         url = result['url']
         domain = urllib.parse.urlparse(url).netloc
         
-        # Check if the domain is in the reputable list
+        # Check if the domain is reputable
         if any(reputable_domain in domain for reputable_domain in reputable_domains):
             reputable_articles.append(result)
         else:
             other_articles.append(result)
     
-    # Combine articles, prioritizing reputable ones
+    # Combine articles
     all_articles = reputable_articles + other_articles
     
     # Limit the total number of articles to max_results
     if len(all_articles) > max_results:
         all_articles = all_articles[:max_results]
     
-    # Extract titles and URLs from the combined list
-    article_info = [{'url': result['url'], 'title': result['title']} for result in all_articles]
-    
-    return article_info
+    return [{'url': result['url'], 'title': result['title']} for result in all_articles]
 
 def fetch_articles_from_newsapi(query, max_results=10):
     """
-    Fetch articles sorted by relevancy, published time, and reputability using NewsAPI.org.
+    Fetch articles sorted by relevancy using NewsAPI.org.
     """
 
     url = (
         f"https://newsapi.org/v2/everything?"
         f"q={query}&"
         f"sortBy=relevancy&"  # Sort by relevancy
-        f"pageSize=100&"  # Fetch more articles to ensure enough results
+        f"pageSize=100&"  
         f"apiKey={API_KEY}"
     )
     
@@ -83,13 +79,9 @@ def fetch_articles_from_newsapi(query, max_results=10):
         response = requests.get(url)
         if response.status_code == 200:
             articles = response.json().get("articles", [])
-            
-            # List of reputable domains
-            # reputable_domains = ["bbc.com", "cnn.com", "cnbc.com", "nytimes.com", "bloomberg.com", "aljazeera.com"]
-            # Inaccessible domain
-            inaccessible_domains = ["yahoo.com"]
 
-            # Filter out articles from inaccessible domains
+            # Filter out articles with inaccessible domains
+            inaccessible_domains = ["yahoo.com"]
             articles = [
                 article for article in articles
                 if not any(inaccessible_domain in urllib.parse.urlparse(article['url']).netloc
@@ -105,13 +97,11 @@ def fetch_articles_from_newsapi(query, max_results=10):
             # articles.sort(key=lambda x: (x['reputability_score'], x['publishedAt']), reverse=True)
             # articles.sort(key=lambda x:  x['publishedAt'], reverse=True)
             
-            # Extract URLs, titles, and descriptions
             return [
                 {
                     "url": article['url'],
                     "title": article['title'],
                     "description": article['description'],
-                    "publishedAt": article['publishedAt'],
                     "source": article['source']['name']
                 }
                 for article in articles[:max_results]
@@ -144,21 +134,20 @@ def fetch_and_summarize(urls):
             all_articles.append(key_sentences)
         
         except Exception as e:
-            print(f"⚠️ Error processing {url}: {e}")
+            print(f"Error processing {url}: {e}")
     
     return all_articles
 
 # Combine multiple summaries into one
 def summarize_articles(articles):
     
-    # combined_text = " ".join(article['text'] for article in articles)
     combined_text = " ".join(articles)
-    print(f"🔹 Intial Tokenized Length: {len(model_tokenizer.tokenize(combined_text))}")
+    print(f"Intial Tokenized Length: {len(model_tokenizer.tokenize(combined_text))}")
 
     tokens = model_tokenizer(combined_text, return_tensors="pt", truncation=True, max_length=MAX_TOKENS)
     combined_text = model_tokenizer.decode(tokens["input_ids"][0], skip_special_tokens=True)
 
-    print(f"🔹 Final Tokenized Length: {len(model_tokenizer.tokenize(combined_text))}")
+    print(f"Final Tokenized Length: {len(model_tokenizer.tokenize(combined_text))}")
     
     # Summarize the combined text
     summary = summarizer(combined_text, max_length=500, min_length=100, do_sample=False)[0]['summary_text']

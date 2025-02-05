@@ -5,7 +5,7 @@ from wordcloud_visualizer import generate_wordcloud
 from sentiment_analysis import analyze_sentiment
 from news_scraper import fetch_articles_from_newsapi, fetch_articles_from_url, fetch_and_summarize, summarize_articles
 
-# Streamlit UI
+# Header UI
 st.title("Interactive Specific News Summarizer")
 
 topic = st.text_input("Enter a topic you're interested in:")
@@ -18,16 +18,10 @@ if st.button("Get News"):
         if articles:
             st.write("Fetching news articles...")
             
-            # Create a DataFrame for the articles
+            # Display the articles in a table
             df = pd.DataFrame(articles)
-            
-            # Extract the source domain from the URL
             df['source'] = df['url'].apply(lambda x: urllib.parse.urlparse(x).netloc)
-            
-            # Format the URL as a clickable hyperlink
             df['url'] = df['url'].apply(lambda x: f'[Link]({x})')
-            
-            # Display the DataFrame in a table
             st.write("**Articles:**")
             st.markdown(df[['title', 'source', 'url']].to_markdown(index=False), unsafe_allow_html=True)
 
@@ -42,18 +36,14 @@ if st.button("Get News"):
 
             # Combine summaries into one
             combined_summary = summarize_articles(articles_description)
-            # Display combined summary
             st.write("**Combined Summary:**")
             st.write(combined_summary)
             
             st.write("**WordCloud:**")
-            # Word Cloud and Sentiment Analysis for the combined text
             wordcloud = generate_wordcloud(combined_summary)
             st.image(wordcloud.to_array())
 
             st.write("Generating sentiment analysis...")
-
-            # Sentiment analysis of the combined text
             label, score = analyze_sentiment(combined_summary)
             st.write(f"Sentiment: {label} with confidence {score:.2f}")
 
