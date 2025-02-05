@@ -27,12 +27,6 @@ summarizer, model_tokenizer = load_summarizer()
 # API_KEY = os.getenv("NEWSAPI_KEY")
 API_KEY = st.secrets["NEWSAPI_KEY"]
 
-
-# Function to create the correct search URL
-def encode_query(query):
-    query_encoded = urllib.parse.quote_plus(query)
-    return query_encoded
-
 # Function to fetch article links from the search result page
 def fetch_articles_from_url(query, max_results=10):
     """
