@@ -3,13 +3,7 @@ import pandas as pd
 import urllib.parse
 from wordcloud_visualizer import generate_wordcloud
 from sentiment_analysis import analyze_sentiment
-from news_scraper import (
-    MODELS, 
-    fetch_articles_from_newsapi, 
-    fetch_and_summarize, 
-    summarize_articles, 
-    load_summarizer
-)
+import news_scraper
 
 # Streamlit UI
 st.title("Interactive Specific News Summarizer")
@@ -20,13 +14,13 @@ topic = st.text_input("Enter a topic you're interested in:")
 # Streamlit dropdown for summarization model selection
 selected_model = st.selectbox(
     "Choose a Summarization Model:", 
-    list(MODELS.keys())
+    list(news_scraper.MODELS.keys())
 )
 
 # Load the selected model dynamically
 @st.cache_resource(max_entries=1)
 def get_summarizer(model_name):
-    return load_summarizer(model_name)
+    return news_scraper.load_summarizer(model_name)
 
 summarizer, model_tokenizer = get_summarizer(selected_model)
 
@@ -36,7 +30,7 @@ st.write(f"🔹 **Speed & Accuracy Info:** {selected_model.split('(')[-1].strip(
 
 if st.button("Get News"):
     if topic.strip():
-        articles = fetch_articles_from_newsapi(topic)
+        articles = news_scraper.fetch_articles_from_newsapi(topic)
         if articles:
             st.write("Fetching news articles...")
 
@@ -57,13 +51,13 @@ if st.button("Get News"):
 
             # Method 1: Fetch using newspaper3k
             articles_url = [article["url"] for article in articles]
-            articles_description = fetch_and_summarize(articles_url)
+            articles_description = news_scraper.fetch_and_summarize(articles_url)
 
             # Method 2: Fetch using NewsAPI descriptions (Alternative)
             # articles_description = [article["description"] for article in articles]
 
             # Summarize using the selected model
-            combined_summary = summarize_articles(articles_description)
+            combined_summary = news_scraper.summarize_articles(articles_description, summarizer, model_tokenizer)
 
             # Display combined summary
             st.write("**Combined Summary:**")

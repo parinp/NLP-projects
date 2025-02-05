@@ -178,7 +178,7 @@ def fetch_and_summarize(urls):
     return all_articles
 
 # Combine multiple summaries into one
-def summarize_articles(articles):
+def summarize_articles(articles, summarizer, model_tokenizer):
     
     # combined_text = " ".join(article['text'] for article in articles)
     combined_text = " ".join(articles)
