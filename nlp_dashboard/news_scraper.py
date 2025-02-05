@@ -42,7 +42,6 @@ def load_summarizer(model_name):
 load_dotenv()
 
 MAX_TOKENS = 1022
-summarizer, model_tokenizer = load_summarizer()
 # API_KEY = os.getenv("NEWSAPI_KEY")
 API_KEY = st.secrets["NEWSAPI_KEY"]
 
