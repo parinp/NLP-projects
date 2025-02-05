@@ -12,8 +12,7 @@ topic = st.text_input("Enter a topic you're interested in:")
 
 if st.button("Get News"):
     if topic.strip():
-        # articles = fetch_articles_from_newsapi(topic)
-        articles = []
+        articles = fetch_articles_from_newsapi(topic)
         if not articles:
             articles = fetch_articles_from_url(topic)
         if articles:
