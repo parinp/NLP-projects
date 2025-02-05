@@ -5,4 +5,9 @@ This Python script fetches news articles using the NewsAPI.org API primarliy or 
 ## Features
 - Fetches articles based on user queries.
 - Prioritizes articles from reputable domains (e.g., BBC, Bloomberg, CNN).
+- The NewsAPI has a limit of 100 requests per day. After exceeding, it will use DuckDuckGo Search instead.
 - Returns structured data (title and URL) for easy use.
+
+## Testing
+Please feel free to test the script with your own queries. The script is designed to be flexible.
+https://nlp-projects-hhhqvxvtzqngdztqz8vk8p.streamlit.app/
